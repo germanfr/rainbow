@@ -1,95 +1,364 @@
-* { margin: 0; padding: 0; }
-html, body { min-height: 100%; height: 100%; position: relative;}
+
 body {
-	background: #555 url(background2.png);
-	font: 100% "Helvetica";
-	color: #DDD;
-	height: 100%;
-	transition: background-color .3s ease .1s;
+	background: #DDD;
+	font: 95% "Helvetica", "Arial";
+	color: #444;
 }
-#container, .non-selectable {
+::selection {
+	background: #66CCCC;
+	color: #393939;
+}
+::-moz-selection {
+	background: #66CCCC;
+	color: #393939;
+}
+
+a, a:link, a:visited {
+	cursor: pointer;
+	color: #66CCCC;
+	text-decoration: underline;
+}
+
+input[type=text] {
+	border-radius: 5px;
+}
+input[type=text]:active, input[type=text]:focus,
+textarea:active, textarea:focus {
+	border-color: #66CCCC;
+}
+
+
+
+#rw-titulo, #pickboard, #huebar {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
-h1 {
-	text-align: center;
-	font: 40px "Comic Sans MS";
-	line-height: 3;
+
+#saved-colors, .saved-color{
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
 }
-#wrapper {
-	width: 750px;
-	margin: 24px auto;
-	background: rgba(0,0,0,.6);
-	border-radius: 100px;
+
+
+h1 {
+	display:block;
+	background: url(title/titlebar.png);
+	background-size: auto 100%;
+	min-width: 570px;
+	min-height: 40px;
+	margin: 20px 0 30px;
+	position: relative;
+	text-align: center;
+	height: 84px;
+}
+#main, #container, #footer, h1 img {
+	margin: 0 auto;
+	width: 570px;
+	position: relative;
 }
 #container {
 	font-size: 0px;
-	outline: 1px solid #333;
-	margin: 30px auto;
-	background: rgba(0,0,0,.6);
-	width: 588px;
+	height: 340px;
 }
-#pickboard, #huebar, #salida {
-	height: 364px;
+#footer {
+	margin-top: 30px;
+	padding: 15px 0;
+	text-align: center;
+	background: #CCCCCC;
+}
+
+#pickboard, #huebar, #salida, #actions {
+	height: 320px;
 	background-size: 100% 100%;
-	outline: 1px solid #333;
-	display: inline-block;
-	margin: 8px;
+	border: 1px solid #CCC;
 	font-size: 13px;
 	vertical-align: top;
-	position: relative;
-	cursor: default!important;
+	position: absolute;
+	cursor: default;
 	overflow: visible;
+	top: 10px;
 }
 #pickboard {
-	width: 364px;
-	background-image: url(colormask.png);
-	background-color: #d12;
-	
+	width: 320px;
+	left: 50px;
+	background-image: url(picker/colormask.png);
+	background-color: #F00;
 }
 #huebar {
 	width: 16px;
-	background-image: url(huebar.png);
+	left: 380px;
+	background-image: url(picker/huebar.png);
 }
-#hueselect {
-	background-image: url(hueselect.png);
-	background-size: 100% 100%;
+#salida {
+	right: 10px;
+	border-color: transparent;
+}
+
+#hueCursor {
+	background-image: url(picker/hueselect.svg);
 	width: 20px;
 	height: 6px;
 	position:absolute;
 	top: -2px;
 	left: -2px;
 }
-#cursor {
+#colorCursor {
 	height: 12px;
 	width: 12px;
-	background: url(cursor.png);
-	background-size: 100%;
+	background-image: url(picker/cursor.svg);
 	position: absolute;
-	top: -5px;
-	left: -5px;
+	top: -4px;
+	left: -4px;
 }
-#muestra {
-	height: 100px;
-	width: 160px;
-	background-color: white;
+#muestra { 
+	height: 140px; 
+	width: 140px;
+	margin-bottom: 5px;
+	position: relative;
 }
-#inputs input[type=text], #inputs label {
-	display: inline-block;
-	padding: 3px;
-	margin: 5px 0;
-	border: 0;
-	width: 40px;
-	box-sizing: border-box;
-	vertical-align: top;
-	outline: 1px solid tomato;
+#nuevo, #viejo { 
+	background-color: white; 
+	height: 50%; 
+	width: 100%; 
+	display: block;
+	position: relative;
 }
-#inputs label { width: 15px; padding: 0;}
-#inputs div { font-size: 18px; }
+#nuevo {
+	border-radius: 0 0 50% 50%/0 0 100% 100%;
+}
+#viejo { 
+	transition: background-color .2s linear;
+	 border-radius: 50% 50% 0 0/100% 100% 0 0;
+}
+
+#attached-code {
+	left: 0;
+	right: 0;
+	top:0;
+	margin: auto;
+	width: 6em;
+	height: 2em;
+	line-height: 2em;
+	text-align: center;
+	cursor: text;
+	border-radius: 2px;
+}
+div#safeColor {
+	height: 30%; 
+	width: 30%;
+	z-index: 10;
+	border: 2px solid #DDD;
+	border-radius: 50%;
+	cursor:pointer;
+	right: 0;
+}
+div#safeColor:hover {
+	border-color: #66CCCC;
+}
+
+div#safeColor, div#attached-code, .title {
+	position:absolute;
+	bottom:0;
+	background-color: #FFF;
+	visibility: hidden;
+	opacity: 0;
+	transition: .2s ease opacity, .2s ease visibility;
+}
+
+#inputs { height: 182px; position: relative;}
+
+#salida input[type=text] {
+	width: 100%;
+	padding: 6px 0 6px 26px;
+	
+}
+.type-of-color > div { margin: 10px 0; position: relative;}
 .type-of-color {
-	display: inline-block;
-	outline: 0px dashed lightblue;
+	position: absolute;
+	width: 65px;
 }
-#salida { outline: 0; font-size: 0;}
+#rgb, #hexadecimal {left: 0; }
+#hsv {right:0;}
+#hexadecimal { top: 130px; width: 100%;}
+
+input#hex {
+	font-size: 24px;
+	padding-left:34px;
+	line-height: 1.15em;
+}
+.type-of-color input {
+	line-height: 1.15em;
+}
+.type-of-color span, .saved-color:before {
+	pointer-events: none;
+	position: absolute;
+	z-index:1;
+	font-size: 14px;
+	color: #777;
+	bottom:7px;
+	left: 8px;
+	display: block;
+}
+#hexadecimal span { 
+	font-size: 24px;
+	left: 12px;
+}
+
+#actions {
+	width: 32px;
+	left: 8px;
+	border: none;
+}
+
+#actions > div {
+	height: 32px;
+	width: 32px;
+	margin: 0 0 8px;
+	position:relative;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	cursor: pointer;
+	border-radius: 3px;
+	transition: background-color .5s;
+}
+.rw-button-active, #actions > div:hover {
+	background-color: rgba(0,0,0,.10);
+	transition-duration: .1s;
+}
+#actions > div:active {
+	background-color: rgba(0,0,0,.2);
+}
+
+#actions div:hover .title {
+	opacity:1;
+	visibility:visible;
+}
+
+
+
+
+
+
+.saved-color{
+	position: relative;
+	float: left;
+	cursor: pointer;
+}
+.saved-color:active, div#safeColor:active {
+	transform: scale(1.03, 1.03);
+	z-index:1;
+}
+
+.saved-color input[type=text] {
+	padding: 4px 0 4px 15px;
+	margin:0!important;
+	width: 100%;
+	border-radius: 0;
+	border: 0;
+	position:absolute;
+	bottom: 0;
+	left: 0;
+	background: rgba(250,250,250,.5);
+	cursor: pointer;
+}
+.saved-color:before {
+	content:"#";
+	color:#333;
+	left: 6px;
+	bottom: 4px;
+}
+
+#saved-colors {
+	height: 90px;
+	padding: 0 0 0 46px;
+}
+#saved-colors .saved-color { /*Hacer cálculosssssss*/
+	height: 78px;
+	width: 78px;
+	margin: 0 4px;
+	border: 1px solid #CCC;
+	
+}
+
+#extended-shades,#extended-lights {
+	height: 90px;
+	padding:0;
+	margin: 0.6em 0;
+}
+#extended-shades .saved-color,#extended-lights .saved-color { 
+	height: 78px;
+	width: 14.2%;
+	margin: 0;
+}
+
+
+
+
+
+#html-css-codes, .window-box {
+	
+	background: #F0F0F0;
+	box-shadow: 0 3px 5px rgba(0,0,0,.2);
+	border-radius: 3px;
+
+	padding: 15px 15px 30px;
+	overflow: auto;
+
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity .2s linear, visibility .2s linear;
+
+	z-index: 1000;
+	position: absolute;
+	
+	margin: 0 auto 1%;
+	top: 2%;
+	left:0;
+	right: 0;
+	
+	width: 570px;
+	box-sizing: border-box;
+}
+
+
+
+#html-css-codes h3 {
+	margin: 0 0 .2em;
+}
+
+#html-css-codes h5 {
+	font-size: 1em;
+	font-weight: normal;
+	margin: 0.6em 0 .2em;
+}
+#html-css-codes > input {
+	margin: 5px 1% 5px 0;
+	padding: 6px 8px;
+	display: inline-block;
+	width: 49%;
+	font-size: 85%;
+}
+
+#muestra-extended {
+	display: inline-block;
+	height: 50px;
+	width: 50px;
+	border: 5px solid white;
+	background-color:white;
+	box-shadow:0 0 3px rgba(0,0,0,.2) inset /*,
+				0 0 3px rgba(0,0,0,.2)*/;
+				outline: 1px solid #E0E0E0;
+	margin-bottom: 0.6em;
+}
+
+h3#html-extended-color {
+	display:inline-block;
+	line-height: 60px;
+	height: 60px;
+	vertical-align: top;
+	margin: 0 15px;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Color Picker</title>
+  <script type="text/javascript" src="javascript.js"></script>
+</head>
+<body>
+
+    <div style="position:relative;height:286px;width:531px;border:1px solid black;">
+      <div id="gradientBox" style="cursor:crosshair;position:absolute;top:15px;left:15px;width:256px;height:256px;">
+        <img id="gradientImg" style="display:block;width:256px;height:256px;" src="color_picker_gradient.png" />
+        <img id="circle" style="position:absolute;height:11px;width:11px;" src="color_picker_circle.gif" />
+      </div>
+      <div id="hueBarDiv" style="position:absolute;left:310px;width:35px;height:256px;top:15px;">
+        <img style="position:absolute;height:256px;width:19px;left:8px;" src="color_picker_bar.png" />
+        <img id="arrows" style="position:absolute;height:9px;width:35px;left:0px;" src="color_picker_arrows.gif" />
+        <br />
+      </div>
+      <div style="position:absolute;left:370px;width:145px;height:256px;top:15px;">
+      <div style="position:absolute;border: 1px solid black;height:50px;width:145px;top:0px;left:0px;">
+        <div id="quickColor" style="position:absolute;height:50px;width:73px;top:0px;left:0px;"></div>
+        <div id="staticColor" style="position:absolute;height:50px;width:72px;top:0px;left:73px;"></div>
+      </div>
+      <br />
+    <table width="100%" style="position:absolute;top:55px;">
+        <tr>
+          <td>Hex: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="hexBox" onchange="hexBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Red: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="redBox" onchange="redBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Green: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="greenBox" onchange="greenBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Blue: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="blueBox" onchange="blueBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Hue: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="hueBox" onchange="hueBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Saturation: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="saturationBox" onchange="saturationBoxChanged();" />
+          </td>
+        </tr>
+        <tr>
+          <td>Value: </td>
+          <td>
+            <input style="margin:0.3em;" size="8" type="text" id="valueBox" onchange="valueBoxChanged();" />
+          </td>
+        </tr>
+      </table>
+      </div>
+    </div>
+    </center>
+    <script type="text/javascript">
+    fixGradientImg();
+    var currentColor = Colors.ColorFromRGB(64,128,128);
+    new dragObject("arrows", "hueBarDiv", arrowsLowBounds, arrowsUpBounds, arrowsDown, arrowsMoved, endMovement);
+    new dragObject("circle", "gradientBox", circleLowBounds, circleUpBounds, circleDown, circleMoved, endMovement);
+    colorChanged('box');
+    </script>
+  </body>
+  </html>
