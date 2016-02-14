@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>Color picker</title>
+	<link rel="shortcut icon" href="favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<script type="text/javascript" src="colorpicker.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Rainbow Color Picker</h1>
+		<div id="container">
+			<div id="pickboard">
+				<div id="cursor"></div>
+			</div>
+			<div id="huebar">
+				<div id="hueselect"></div>
+			</div>
+			<div id="salida">
+				<div id="muestra"></div>
+				<div id="inputs">
+					<div class="type-of-color">
+						<div><label for="red">R</label><input type="text" id="red" value="255"/></div>
+						<div><label for="green">G</label><input type="text" id="green" value="255"/></div>
+						<div><label for="blue">B</label><input type="text" id="blue" value="255"/></div>
+					</div>
+					<div class="type-of-color">
+						<div><label for="hue">H</label><input type="text" id="hue" value="0"/> º</div>
+						<div><label for="saturation">S</label><input type="text" id="saturation" value="0"/> %</div>
+						<div><label for="value">V</label><input type="text" id="value" value="100"/> %</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
