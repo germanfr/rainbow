@@ -1,0 +1,5 @@
+#Auto line endings for all text files
+* text=auto
+
+#GitHub ignores these files for language stats
+doc/* linguist-documentation

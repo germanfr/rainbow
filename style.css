@@ -1,6 +1,6 @@
 
 body {
-	background: #DDD;
+	background: #E0E0E0;
 	font: 90% "Helvetica", "Arial";
 	color: #444;
 }
@@ -20,7 +20,7 @@ a, a:link, a:visited {
 }
 
 input[type=text] {
-	background-color: #EEEEEE;
+	background-color: #FAFAFA;
 }
 input[type=text]:active, input[type=text]:focus,
 textarea:active, textarea:focus {
@@ -57,12 +57,12 @@ h1, #pickboard, #huebar, #actions, #attached-code {
 h1 {
 	display:block;
 	width:100%;
-	height: 73px;
+	height: 77px;
 	min-width: 720px;
 	min-height: 40px;
 	margin: 16px 0 32px;
 
-	background: url(title/titlebar.png);
+	background: url(assets/title/titlebar.png);
 	background-size: 100% 100%;
 	
 	text-align: center;
@@ -74,82 +74,107 @@ h1 img {
 	height:100%;
 }
 
-#main, #container, #footer {
+.tarjeta, #ctx-window {
+	background: #F5F5F5;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+	border-radius: 2px;
+	padding: 16px;
+	box-sizing: border-box;
+	border-bottom: 1px solid #E0E0E0;
+}
+#main > .tarjeta {
+	margin: 4px;
+	display: inline-block;
+	vertical-align: top;
+}
+#main {
 	margin: 0 auto;
-	width: 720px;
-	position: relative;
-
+	position:relative;
+	min-height: 100%;
+	width: 800px;
 }
 
 #container {
-	height: 338px;
+	height: 320px;
+	width: 564px;
+	position: relative;
 }
 #footer {
 	margin-top: 16px;
 	padding: 16px 0;
 	text-align: center;
 	background: #CCC;
+	border-bottom: 4px solid #339966;
 }
 
-#pickboard, #huebar, #salida, #actions {
-	height: 320px;
-	background-size: 100% 100%;
-	border: 1px solid #CCC;
+ #salida{
 	position: absolute;
+	top: 16px;
+	right: 4px;
+	width: 240px;
+}
+
+#pickboard, #huebar {
+	position: absolute;
+	background-size: 100% 100%;
 	cursor: default;
 	overflow: visible;
-	top: 8px;
-
 }
+
 #pickboard {
-	width: 320px;
-	left: 180px;
-	background-image: url(picker/colormask.png);
+	background-image: url(assets/picker/colormask.png);
 	background-color: #F00;
-}
-#huebar {
-	width: 16px;
-	left: 508px;
-	background-image: url(picker/huebar.png);
-}
-#salida {
-	right: 8px;
-	border-color: transparent;
+	height: 320px;
+	width: 320px;
+	left: 0px;
+	top: 0px;
+	border-radius: 2px 0 0 2px;
 }
 
-#hueCursor {
-	background-image: url(picker/hueselect.svg);
-	width: 20px;
-	height: 6px;
-	position:absolute;
-	top: -2px;
-	left: -2px;
+#huebar {
+	height: 8px;
+	width: 212px;
+	bottom: 16px;
+	right: 16px;
+	background-image: url(assets/picker/huebar.png);
+	border-radius: 2px;
 }
-#colorCursor {
+
+#huebarPointer {
+	background-color: #424242;
+	width: 16px;
+	height: 16px;
+	border-radius: 10px;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.20);
+	position:absolute;
+	top: -4px;
+	left: -8px;
+}
+#pickboardPointer {
 	height: 12px;
 	width: 12px;
-	background-image: url(picker/cursor.svg);
+	background-image: url(assets/picker/cursor.svg);
 	position: absolute;
 	top: -4px;
 	left: -4px;
 }
 #muestra { 
-	height: 140px; 
-	width: 140px;
-	margin-bottom: 5px;
+	height: 114px; 
+	width: 114px;
+	margin:0 auto 8px;
 	position: relative;
 }
-#nuevo, #viejo { 
-	background-color: white; 
+#currentColor, #attachedColor { 
+	background-color: #FFFFFF; 
 	height: 50%; 
 	width: 100%; 
 	display: block;
 	position: relative;
 }
-#nuevo {
+#currentColor {
 	border-radius: 0 0 50% 50%/0 0 100% 100%;
 }
-#viejo { 
+#attachedColor { 
 	transition: background-color .2s linear;
 	 border-radius: 50% 50% 0 0/100% 100% 0 0;
 }
@@ -167,57 +192,41 @@ h1 img {
 	border-radius: 2px;
 }
 
-div#safeColor {
-	position:absolute;
-	
-	height: 30%; 
-	width: 30%;
-	z-index: 10;
-	border: 2px solid #DDD;
-	border-radius: 50%;
-	cursor:pointer;
-	right: 0;
-	bottom:0;
-
-	background-color: #FFF;
-	transition: background-color .5s ease;
-}
-div#safeColor:hover {
-	border-color: #66CCCC;
-	
-}
-
 div#attached-code, .title {
 	position:absolute;
 	bottom:0;
 	background-color: #FFF;
 }
 
-#inputs {  position: relative;}
 
-#salida input[type=text] {
-	width: 100%;
+/*Reviso desde aqui*/
+
+#inputs {
+	font-size: 0px;
+	text-align: center;
+}
+
+#inputs > div > div, #inputs #hex-div {
+	display: inline-block;
+	margin: 8px 4px;
+	position: relative;
+}
+
+#inputs input[type=text] {
+	width: 64px;
 	padding: 6px 0 6px 26px;
-	
+	line-height: 1.15em;
+	text-align: left;
 }
-.type-of-color > div { margin: 10px 0; position: relative;}
-.type-of-color {
-	position: absolute;
-	width: 65px;
-}
-#rgb, #hexadecimal {left: 0; }
-#hsv {right:0;}
-#hexadecimal { top: 130px; width: 100%;}
 
-input#hex {
+#inputs input#hexInput {
 	font-size: 24px;
 	padding-left:34px;
 	line-height: 1.15em;
+	width: 148px;
 }
-.type-of-color input {
-	line-height: 1.15em;
-}
-.type-of-color span, .saved-color:before {
+
+#inputs span, .saved-color:before {
 	pointer-events: none;
 	position: absolute;
 	z-index:1;
@@ -227,15 +236,15 @@ input#hex {
 	left: 8px;
 	display: block;
 }
-#hexadecimal span { 
+
+#inputs #hex-div span { 
 	font-size: 24px;
 	left: 12px;
 }
+/*hasta aqui*/
 
 #actions {
 	left: 8px;
-	max-width: 164px;
-	border: none;
 	overflow:hidden;
 }
 
@@ -279,7 +288,7 @@ input#hex {
 	float: left;
 	cursor: pointer;
 }
-.saved-color:active, div#safeColor:active,#attached-code:active {
+.saved-color:active, #attached-code:active {
 	transform: scale(1.03, 1.03);
 	z-index:1;
 }
@@ -304,13 +313,16 @@ input#hex {
 }
 
 #saved-colors {
-	height: 97px;
+	/*height: 97px;*/
+	padding-left: 12px;
+	padding-right: 12px;
 
 }
-#saved-colors .saved-color { /*Hacer cálculosssssss*/
-	height: 81px;
-	width: 81px;
-	margin: 8px 0 8px 8px;
+#saved-colors:after {content: ""; display: block; height: 0; clear: both; visibility: hidden;}
+#saved-colors .saved-color {
+	height: 82px;
+	width: 82px;
+	margin: 8px 4px 8px 4px;
 }
 
 #extended-shades,#extended-lights {
@@ -329,10 +341,6 @@ input#hex {
 
 
 #ctx-window {
-	
-	background: #F0F0F0;
-	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
-	border-radius: 3px;
 
 	padding: 15px 15px 30px;
 	overflow: auto;
