@@ -24,7 +24,7 @@
 		</ul>
 	</div>--> 
 
-	<h1><img id="rw-titulo" src="title/rainbow.png" alt="Rainbow Color Picker"/></h1>
+	<h1><img src="title/rainbow.png" heihgt="80px" width="542px" alt="Rainbow Color Picker"/>Rainbow Color Picker</h1>
 	<div id="main">
 		<div id="container">
 			<div id="pickboard">
@@ -38,10 +38,10 @@
 			<div id="salida">
 				<div id="muestra">
 					<div id="viejo">
-						<div id="attached-code">#FFFFFF</div>
+						<div id="attached-code" class="oculto">#FFFFFF</div>
 					</div>
 					<div id="nuevo"></div>
-					<div id="safeColor"></div>
+					<div id="safeColor" title="Web-safe color"></div>
 				</div>
 				<div id="inputs">
 					<div class="type-of-color" id="rgb">
@@ -61,24 +61,20 @@
 				</div>
 			</div>
 			<div id="actions">
-				<div id="rw-fav" style="background-image:url('icons/action_fav.svg');">
-					<div class="title">Save color</div>
-				</div>
-				<div id="rw-attach" style="background-image:url('icons/action_attach.svg');">
-					<div class="title">Attach color</div>
-				</div>
-				<div id="rw-invert" style="background-image:url('icons/action_invert.svg');">
-					<div class="title">Invert color</div>
-				</div>
-				<div id="rw-random" style="background-image:url('icons/action_random.svg');">
-					<div class="title">Generate random color</div>
-				</div >
-				<div id="rw-websafe" style="background-image:url('icons/action_safe.svg');">
-					<div class="title">View web safe colors</div>
-				</div>
-				<div id="rw-codes" style="background-image:url('icons/action_code.svg');">
-					<div class="title">Generate CSS color codes</div>
-				</div>
+				<div id="rw-fav" style="background-image:url('icons/action_fav.svg');">Save color</div>
+
+				<div id="rw-attach" style="background-image:url('icons/action_attach.svg');">Attach color</div>
+
+				<div id="rw-info" style="background-image:url('icons/action_info.svg');">Color info</div>
+
+				<div id="rw-codes" style="background-image:url('icons/action_code.svg');">CSS codes</div>
+
+				<div id="rw-invert" style="background-image:url('icons/action_invert.svg');">Invert color</div>
+
+				<div id="rw-random" style="background-image:url('icons/action_random.svg');">Random color</div>
+
+				<div id="rw-websafe" style="background-image:url('icons/action_safe.svg');">Web-safe colors</div>
+
 			</div>
 			
 		</div>
@@ -87,29 +83,8 @@
 		
 	</div>
 
-	<div id="html-css-codes" class="window-box">
-		<div class="close-button" onclick="makeInvisible(this.parentNode);"></div>
-		
-		<div id="muestra-extended"></div>
-		<h3 id="html-extended-color">#FFFFFF</h3>
-
-		<h3 id="shades-title">Shades of #FFFFFF</h3>
-		<div id="extended-shades"></div>
-
-		<h3 id="lights-title">Lights of #FFFFFF</h3>
-		<div id="extended-lights"></div>
-
-		<h3>CSS codes:</h3>
-		<h5>HEXADECIMAL</h5>
-		<input type="text" id="hexCodes-color" spellcheck="false" value=".text {color:#FFFFFF;}"/><input type="text" id="hexCodes-background" spellcheck="false" value=".background {background-color:#FFFFFF;}"/>
-		<h5>RGB</h5>
-		<input type="text" id="rgbCodes-color" spellcheck="false" value=".text {color:rgb(255,255,255);}"/><input type="text" id="rgbCodes-background" spellcheck="false" value=".background {background-color:rgb(255,255,255);}"/>
-		<h5>HSL</h5>
-		<input type="text" id="hslCodes-color" spellcheck="false" value=".text {color:rgb(255,255,255);}"/><input type="text" id="hslCodes-background" spellcheck="false" value=".background {background-color:rgb(255,255,255);}"/>
-	</div>
-
 	<div id="footer">
-		Developed by germ0n
+		Made by <a  href="https://github.com/german6">Germán Franco</a> with love and a keyboard.
 	</div>
 
 </body>

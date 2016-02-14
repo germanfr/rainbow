@@ -1,6 +1,8 @@
 var pickboardHeight = 256;
 var huebarHeight = 256;
 
+var MAX_COLORS = 8;
+
 var redId = "red", greenId = "green", blueId = "blue";
 var hueId = "hue", satId = "saturation", valId = "value";
 var hexId = "hex";
@@ -112,11 +114,11 @@ function webSafeColor(rgb) {
 }
 
 //FIXME doesnt works
-function hsv2hsl(hue,sat,val){
-	var aux = ((aux=(2-sat)*val)>=1)?(2-aux):aux;
+function hsv2hsl(hsv){
+	var aux = ((aux=(2-hsv[1])*hsv[2])>=1)?(2-aux):aux;
 	if(aux == 0)
 		aux = 1;
-	return[hue, sat*val/aux, (2-sat)*val/2]
+	return[hsv[0], hsv[1]*hsv[2]/aux, (2-hsv[1])*hsv[2]/2]
     /*return[ //[hue, saturation, lightness]
             //Range should be between 0 - 1
         hue, //Hue stays the same
@@ -132,14 +134,27 @@ function hsv2hsl(hue,sat,val){
     ]*/
 }
 
+//Convierte color RGB a formato CSS rgb(x,x,x)
+function RGBtoString(rgb) {
+	return "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+}
+
 function makeInvisible(objeto) {
-	objeto.style.visibility="hidden";
-	objeto.style.opacity="0";
+	if(objeto.className.indexOf("visible")>=0) {
+		objeto.className = objeto.className.replace("visible","oculto");
+	}
+	else {
+		objeto.className += " oculto";
+	}
 
 }
 function makeVisible(objeto) {
-	objeto.style.visibility="visible";
-	objeto.style.opacity="1";
+	if(objeto.className.indexOf("oculto")>=0) {
+		objeto.className = objeto.className.replace("oculto","visible");
+	}
+	else {
+		objeto.className += " visible";
+	}
 }
 
 
@@ -148,8 +163,8 @@ function pointerPosition(x,y) {			//Posicion del picker del cuadrado
 	var cursor = obtenerID('colorCursor');
 	if(y<=4) y=4;
 	if(x<=4) x=4;
-	cursor.style.top = y-8 + 'px';
-	cursor.style.left = x-8 + 'px';
+	cursor.style.top = y-7 + 'px';
+	cursor.style.left = x-7 + 'px';
 }
 
 function selectorPosition(y) {		//Posicion del picker de hue
@@ -215,27 +230,106 @@ function generarLights(hex,container) {
 
 }
 
-function rellenarCodigosGenerados(rgb,hsv,hex,hsl) {
-	obtenerID('hexCodes-color').value = "color: #"+hex+";";
- 	obtenerID('hexCodes-background').value = "background-color: #"+hex+";";
- 	obtenerID('rgbCodes-color').value = "color: rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+");";
- 	obtenerID('rgbCodes-background').value = "background-color: rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+");";
- 	obtenerID('hslCodes-color').value = "color: hsl("+Math.round(hsl[0])+","+Math.round(hsl[1]*100)+"%,"+Math.round(hsl[2]*100)+"%);";
- 	obtenerID('hslCodes-background').value = "background-color: hsl("+Math.round(hsl[0])+","+Math.round(hsl[1]*100)+"%,"+Math.round(hsl[2]*100)+"%);";
- 	makeVisible(obtenerID('html-css-codes'));
- 	setBackgroundColor(rgb,'muestra-extended');
- 	obtenerID('html-extended-color').innerHTML = "#" + hex + ", (" + rgb[0] + "," + rgb[1] + "," + rgb[2] +")";
+function ventanaInfo(rgb,hex) {
+	var content;
+	content = "<div id='muestra-extended'></div>";
+	content += "<h3 id='html-extended-color'>#" + hex + ", rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")</h3>";
+	content += "<h3 id='shades-title'>Shades of #" + hex + "</h3>";
+	content += "<div id='extended-shades'></div>";
+	content += "<h3 id='shades-title'>Lights of #" + hex + "</h3>";
+	content += "<div id='extended-lights'></div>";
 
- 	
- 	obtenerID("shades-title").innerHTML = "Shades of #" + hex;
- 	generarShades(hex,"extended-shades");
-
- 	obtenerID("lights-title").innerHTML = "Lights of #" + hex;
- 	generarLights(hex,"extended-lights");
- 	obtenerID('html-extended-color').scrollIntoView(false);
-
+	return content;
 }
- 	
+
+function ventanaCodigos(rgb,hex,hsl) {
+	var content;
+	content = "<h3>CSS codes</h3>";
+	content += "<h5>HEXADECIMAL</h5>";
+	content += "<input type='text' spellcheck='false' value='.text {color:#"+hex+";}'/>";
+	content += "<input type='text' spellcheck='false' value='.background {background-color:#"+hex+"}'/>";
+	content += "<h5>RGB</h5>";
+	content += "<input type='text' spellcheck='false' value='.text {color:rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+");}'/>";
+	content += "<input type='text' spellcheck='false' value='.background  {background-color:rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+");}'/>";
+	content += "<h5>HSL</h5>";
+	content += "<input type='text' spellcheck='false' value='.text {color:hsl("+hsl[0]+","+hsl[1]+","+hsl[2]+");}'/>";
+	content += "<input type='text' spellcheck='false' value='.background  {background-color:hsl("+hsl[0]+","+hsl[1]+","+hsl[2]+");}'/>";
+
+	return content;
+}
+
+
+function ventanaSafeColors() {
+	var content;
+	var color;
+	content = "<h3>Web-safe colors</h3>";
+	content += "<table id='safe-table'>";
+	for(var a=0; a<6; a++) {
+		for(var b=0; b<6; b++) {
+			content +="<tr>";
+			for(var c=0; c<6; c++) {
+				color = (a*3).toString(16) + (a*3).toString(16);
+				color += (b*3).toString(16) +(b*3).toString(16);
+				color += (c*3).toString(16) + (c*3).toString(16);
+				color = color.toUpperCase();
+
+				content += "<td style='border-color:#"+color+"'>"+color+"</td>";
+				
+			}
+			content += "</tr>";
+		}
+	}
+	content += "</table>";
+
+	return content;
+}
+
+function closeCtxWindow() {
+	var ventana = document.getElementById("ctx-window");
+	var layer = document.getElementById("layer");
+	makeInvisible(ventana);
+	makeInvisible(layer);
+	setTimeout(function() {
+		document.body.removeChild(ventana);
+		document.body.removeChild(layer);
+	}, 250);
+	
+}
+
+function crearLayer() {
+	var layer = document.createElement("div");
+	layer.setAttribute("id","layer");
+	layer.setAttribute("class","oculto");
+	layer.onclick = closeCtxWindow;
+	document.body.appendChild(layer);
+	setTimeout(function() {
+		makeVisible(layer);
+	}, 16);
+}
+
+function newContextualWindow(content) {
+	var ventana = document.getElementById("ctx-window");
+	if(ventana!=null)
+		closeCtxWindow(ventana);
+
+	ventana = document.createElement("div");
+	ventana.setAttribute("id","ctx-window");
+	ventana.setAttribute("class","oculto");
+	
+	ventana.innerHTML = "<div class='close-button' onclick='closeCtxWindow();'></div>";
+	ventana.innerHTML += content;
+
+	document.body.appendChild(ventana);
+	crearLayer();
+	
+	setTimeout(function() {
+		makeVisible(ventana);
+	}, 1);
+
+	window.scrollTo(0,0);
+}
+
+
 
 function coloresALosInput(hsv,rgb,hex) {		//Muestra el color en los cuadros
 	obtenerID(hueId).value = Math.round(hsv[0]);
@@ -264,12 +358,11 @@ function oldColor(rgb,attached) {
 }
 function guardarColor(color,contenedor) {
 
-	var MAX = 6;
 	if(contenedor != undefined) {
 		var coloresGuardados = contenedor.getElementsByTagName('div');
 
-		if(coloresGuardados.length>=MAX) {
-			contenedor.removeChild(coloresGuardados[MAX-1]);
+		if(coloresGuardados.length>=MAX_COLORS) {
+			contenedor.removeChild(coloresGuardados[MAX_COLORS-1]);
 		}
 		
 		var nuevoColor = crearColor(color,contenedor);
@@ -283,13 +376,15 @@ function crearColor(color,contenedor) {
 		nuevoColor.className = "saved-color";
 		nuevoColor.style.backgroundColor= "#" + color;
 
-		var colorCode = document.createElement('input');
-		colorCode.type="text";
-		colorCode.value= color;
-		colorCode.spellcheck = false;
-		colorCode.setAttribute("readonly","readonly");
-		nuevoColor.appendChild(colorCode);
-		return nuevoColor;
+	var colorCode = document.createElement('input');
+	colorCode.type="text";
+	colorCode.value= color;
+	colorCode.spellcheck = false;
+	colorCode.setAttribute("readonly","readonly");
+	nuevoColor.appendChild(colorCode);
+
+	nuevoColor.addEventListener("click",function(){colorCode.select()})
+	return nuevoColor;
 }
 
 function crearShade(color,contenedor) {
@@ -306,47 +401,67 @@ function crearShade(color,contenedor) {
 	}
 }
 
-function setCookie(cname, cvalue, exdays) {	//Establece una cookie dado el nombre, valor y dias
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*86400000));	//exdays*24*60*60*1000=ms
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+
+function getItemStorage(sname) {
+	var item = localStorage.getItem(sname);
+	if(item == null) item = "";
+	return item;
 }
 
-function getCookie(cname) {	//Obtener una cookie dado su nombre
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1); //Elimina espacios en blanco
-        if (c.indexOf(name) == 0) 
-        	return c.substring(name.length, c.length);
-    }
-    return "";
+function getSavedColors() {
+	var savedColors = getItemStorage("savedColors");
+	
+	if(savedColors.length%6 != 0)
+		savedColors = savedColors.substring(0,savedColors.length-savedColors.length%6);
+
+	return savedColors;
 }
 
-function checkCookies() {	//Checkea las cookies existentes y los muestra por color
-	var aleatorio; var color;
-	for(var c=5; c>=0;c--) {
-	    color = getCookie("savedColor" + c);
-	    if(color!="") 
-	        guardarColor(color,obtenerID('saved-colors'));
-	    else {
-	    	aleatorio = [numAleatorio(0,255),numAleatorio(0,255),numAleatorio(0,255)];
-	    	guardarColor(RGBtoHEX(aleatorio),obtenerID('saved-colors'));
-	    }
-	}
-}
-function insertarCookie(hex) {
-	var cookie;
-	for(var c=5;c>0; c--) {
-			cookie = getCookie("savedColor" + (c-1));
-			setCookie("savedColor" + c, cookie, 30);
+function checkStorage() {
+	if(typeof(Storage) !== "undefined") {
+	    // Code for localStorage/sessionStorage.
+	    var color, listaColores; var c=0;
+	    listaColores = getSavedColors();
+
+	    for(var a=listaColores.length/6; a<MAX_COLORS; a++) {
+			guardarColor(RGBtoHEX(randomColor()),obtenerID('saved-colors'));
 		}
-		setCookie("savedColor0", hex, 30);
+
+	    while(c<MAX_COLORS && listaColores.length>=6) {
+			color = listaColores.substr(0,6);
+			guardarColor(color,obtenerID('saved-colors'));
+			listaColores = listaColores.substring(6,listaColores.length);
+			c++;
+		}
+		return true;
+	}
+	else {
+	    // Sorry! No Web Storage support..
+	    obtenerID('rw-fav').display="hidden";
+	    return false;
+	}
+
 }
+
+function insertarColor(hex) {
+	var savedColors = getSavedColors();
+
+	if(savedColors.length/6>=MAX_COLORS) {
+		savedColors = savedColors.substring(6,savedColors.length);
+	}
+
+	localStorage.setItem("savedColors", savedColors + hex);
+}
+
+
+
+//Numero aleatorio entre A y B, A<B
 function numAleatorio(A,B) {
-	return Math.round(Math.random()*(B-A)+A);
+	return Math.floor(Math.random()*(B-A+1)+A);
+}
+
+function randomColor() {
+	return [numAleatorio(0,255),numAleatorio(0,255),numAleatorio(0,255)];
 }
 
 function createTextareaField(fieldID,textContent,nodoPadre) {
@@ -361,15 +476,29 @@ function createTextareaField(fieldID,textContent,nodoPadre) {
 
 function main() {
 	var hsv = [360, 0, 1], rgb = [255,255,255], hex = 'FFFFFF', hsl = [0,0,1];
+	var attachedColor ="FFFFFF";
 	var attached = false, displayWebSafe = false;
 	pickboardHeight = obtenerID('pickboard').clientHeight;
 	huebarHeight = obtenerID('huebar').clientHeight;
 
+	hex = getItemStorage("lastColor");
+	if(hex!="") {
+		rgb = HEXtoRGB(hex);
+		hsv = RGBtoHSV(rgb);
+		salidaColor(hsv,rgb,hex);
+		oldColor(rgb,false);
+	} else {
+		hex = "FFFFFF";
+	}
+
+	/*
+	//Genera un color aleatorio inicial
 	rgb = [numAleatorio(0,255),numAleatorio(0,255),numAleatorio(0,255)];
 	hsv = RGBtoHSV(rgb);
 	hex = RGBtoHEX(rgb);
 	oldColor(rgb,false);
 	salidaColor(hsv,rgb,hex);
+	*/
 
 		//Entrada por picker
 	var _pos = function(event) {		//Cuando se mueve el ratón en el pickerboard
@@ -382,6 +511,7 @@ function main() {
 		mostrarColores(hsv,rgb,hex);
 	};
 	obtenerID('pickboard').onmousedown = function(event) {
+		oldColor(rgb,attached);
 		_pos(event);
 		document.body.className += ' non-selectable ';
 		window.addEventListener("mousemove", __pos = function(event) {_pos(event) });
@@ -400,6 +530,7 @@ function main() {
 		mostrarColores(hsv,rgb,hex);
 	}
 	obtenerID('huebar').onmousedown = function(event) {
+		oldColor(rgb,attached);
 		_posHue(event);
 		document.body.className += ' non-selectable ';
 		window.addEventListener("mousemove", __posHue = function(event) {_posHue(event) });
@@ -411,11 +542,15 @@ function main() {
 	
 	var levantaElMouse = function() {
 		oldColor(rgb,attached);
+		localStorage.setItem("lastColor",hex);
 		document.body.className = document.body.className.replace(' non-selectable ', '');
 		obtenerID('hex').select();
 		window.removeEventListener("mouseup", quitar);
 	}
-
+	
+	obtenerID(hexId).onclick = function() {
+			this.select();
+		}
 	//Entrada por inputs
 	var losInput = obtenerID('inputs').getElementsByTagName('input');
 	for(var i=0; i<losInput.length; i++) {		
@@ -462,9 +597,18 @@ function main() {
 						hex = hex.toUpperCase();
 						rgb = HEXtoRGB(hex);
 						hsv = RGBtoHSV(rgb);
+					} else if(hex.length == 7 && hex.charAt(0) == "#") {
+						hex = hex.substr(1,6);
+						hex = hex.toUpperCase();
+						rgb = HEXtoRGB(hex);
+						hsv = RGBtoHSV(rgb);
+					}
+					else {
+						hex = RGBtoHEX(rgb);
 					}
 			}
 			salidaColor(hsv,rgb,hex);
+			localStorage.setItem("lastColor",hex);
 		}
 	}
 
@@ -473,18 +617,39 @@ function main() {
 		var attachedCode = obtenerID('attached-code');
 		oldColor(rgb,attached);
 		attached = !attached;
+		attachedColor = hex;
 		oldColor(rgb,attached);
 		this.classList.toggle('rw-button-active');
 
 		if(attached) {
 			attachedCode.innerText = "#" + hex;
 			makeVisible(attachedCode);
-			attachedCode.style.color = "#" + ((hsv[2]>0.6&&hsv[1]<0.6)?"444":hex) ;
+			attachedCode.style.color = "#" + ((hsv[2]>0.6&&hsv[1]<0.6)?"555":hex) ;
 		}
 		else {
 			makeInvisible(attachedCode);
 		}
+		attachedCode.onclick = function() {
+			hex = attachedColor;
+			rgb = HEXtoRGB(hex);
+			hsv = RGBtoHSV(rgb);
+			salidaColor(hsv,rgb,attachedColor);
+			localStorage.setItem("lastColor",hex);
+			obtenerID('hex').select();
+		}
 	};
+
+	obtenerID('rw-info').onmousedown = function() {
+	 	newContextualWindow(ventanaInfo(rgb,hex));
+	 	setBackgroundColor(rgb,'muestra-extended');
+	 	generarShades(hex,"extended-shades");
+	 	generarLights(hex,"extended-lights");
+	 	
+	 };
+
+	 obtenerID('rw-codes').onmousedown = function() {
+	 	newContextualWindow(ventanaCodigos(rgb,hex,hsv2hsl(hsv)));
+	 };
 
 	obtenerID('rw-invert').onclick = function() {
 		oldColor(rgb,attached);
@@ -492,64 +657,54 @@ function main() {
 		hsv = RGBtoHSV(rgb);
 		hex = RGBtoHEX(rgb);
 		salidaColor(hsv,rgb,hex);
+		localStorage.setItem("lastColor",hex);
 		obtenerID('hex').select();
 	 };
 
 	 obtenerID('rw-random').onclick = function() {
 		oldColor(rgb,attached);
-		rgb = [numAleatorio(0,255),numAleatorio(0,255),numAleatorio(0,255)];
+		rgb = randomColor();
 		hsv = RGBtoHSV(rgb);
 		hex = RGBtoHEX(rgb);
 		salidaColor(hsv,rgb,hex);
+		localStorage.setItem("lastColor",hex);
 		obtenerID('hex').select();
 	 };
-	 obtenerID('rw-websafe').onclick = function() {
-	 	var safeColor = obtenerID('safeColor');
-	 	this.classList.toggle('rw-button-active');
-	 	
-	 	displayWebSafe = !displayWebSafe;
-		if(displayWebSafe) {
-			makeVisible(safeColor);	
-	 	}
-		else {
-			makeInvisible(safeColor);
-		}
+	 
+	obtenerID('rw-websafe').onmousedown = function() {
+	 	newContextualWindow(ventanaSafeColors()); 	
+	};
 
-	 	safeColor.onmousedown = function() {
-	 		oldColor(rgb,attached);
-	 		rgb = webSafeColor(rgb);
-	 		hsv = RGBtoHSV(rgb);
-			hex = RGBtoHEX(rgb);
-			salidaColor(hsv,rgb,hex);
-			obtenerID('hex').select();
-			return false;
-	 	};
-		
-	 };
-	 obtenerID('rw-codes').onclick = function() {
-	 	hsl = hsv2hsl(hsv[0],hsv[1],hsv[2]);
-	 	rellenarCodigosGenerados(rgb,hsv,hex,hsl);
-	 };
+	obtenerID('safeColor').onclick = function() {
+ 		oldColor(rgb,attached);
+ 		rgb = webSafeColor(rgb);
+ 		hsv = RGBtoHSV(rgb);
+		hex = RGBtoHEX(rgb);
+		salidaColor(hsv,rgb,hex);
+		localStorage.setItem("lastColor",hex);
+		obtenerID('hex').select();
+ 	};
+	
 	 //Entrada por colores guardados
 	var comprobarSavedColors = function() {
 		var favList = obtenerID('saved-colors').getElementsByTagName('div');
-		for(var fL=0;fL<favList.length;fL++) {
-			favList[fL].onclick = function() { 
-				var color = this.getElementsByTagName('input')[0];
+		for(var fL=0;fL<MAX_COLORS;fL++) {
+			favList[fL].addEventListener("click", function() { 
 				oldColor(rgb,attached);
-				hex = color.value;
+				hex = this.childNodes[0].value;
 				rgb = HEXtoRGB(hex);
 				hsv = RGBtoHSV(rgb);
 				salidaColor(hsv,rgb,hex);
-				color.select();
-			};
+				localStorage.setItem("lastColor",hex);
+			});
 		}
 	};
-	checkCookies();
+	checkStorage();
 	comprobarSavedColors();
+
 	obtenerID('rw-fav').onclick = function() {
 		guardarColor(hex,obtenerID('saved-colors'));
-		insertarCookie(hex);
+		insertarColor(hex);
 		comprobarSavedColors();
 	};
 }
