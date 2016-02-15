@@ -1,26 +1,5 @@
 (function() {
 
-	/****************
-	*    OBJECTS    *
-	****************/
-
-	function ColorFactory() {
-		this._rgb = new RGB(255,255,255);
-		this._hsv = new HSV(0,0,1);
-		this._hex = new HEX("FFFFFF");
-		/*this._hsl = new HSL();*/
-
-		this.attached = false;
-	}
-
-	ColorFactory.prototype.update = function(newColor,where) {
-		this._rgb = newColor.toRGB();
-		this._hsv = newColor.toHSV();
-		this._hex = newColor.toHEX();
-		actualizar(this._rgb,this._hsv,this._hex,where);
-	}
-
-
 	/**************
 	*    OTHER    *
 	**************/
@@ -72,10 +51,23 @@
 	}
 
 
-
 	/***************
 	*    OUTPUT    *
 	***************/
+
+	function actualizar(rgb,hsv,hex,items) {
+		actualizarPointers(hsv,items);
+		actualizarInput(rgb,hsv,hex,items);
+		actualizarColor(rgb,hsv,items);
+	}	
+
+	function actualizarPointers(hsv, where) {
+		var x = hsv.sat*where.pickboard.clientWidth;
+		var y = (1-hsv.val)*where.pickboard.clientHeight;
+		var z = hsv.hue/360*where.huebar.clientWidth;
+		pointerPos(x,y,where.pointer);
+		pointerPosBar(z,where.huePointer);
+	}
 
 	function actualizarInput(rgb,hsv,hex,items) {
 		//RGB inputs
@@ -102,27 +94,11 @@
 		}
 	}
 
-	function actualizarPointers(hsv, where) {
-		var x = hsv.sat*where.pickboard.clientWidth;
-		var y = (1-hsv.val)*where.pickboard.clientHeight;
-		var z = hsv.hue/360*where.huebar.clientWidth;
-		pointerPos(x,y,where.pointer);
-		pointerPosBar(z,where.huePointer);
-	}
-
-	function actualizar(rgb,hsv,hex,items) {
-		actualizarPointers(hsv,items);
-		actualizarInput(rgb,hsv,hex,items);
-		actualizarColor(rgb,hsv,items);
-	}
-
-
 
 	/***************
 	*    EVENTS    *
 	***************/
 
-	//var colors = new ColorFactory();
 	var rgb = RGB.random();
 	var hsv = rgb.toHSV();
 	var hex = rgb.toHEX();
@@ -207,6 +183,7 @@
 			window.removeEventListener("mouseup", quitar);
 		}
 
+
 		/**********************
 		*    INPUT EVENTS    *
 		**********************/
@@ -266,7 +243,6 @@
 			actualizar(rgb,hsv,hex,editable);
 			updateOld(rgb,editable.attachedColor);
 		});
-
 		//Sat input
 		editable.satInput.addEventListener("change", function() {
 			//Get color
@@ -290,9 +266,11 @@
 			updateOld(rgb,editable.attachedColor);
 		});
 
+
 		/****************
 		*    ACTIONS    *
 		****************/
+
 		document.getElementById("action-random").addEventListener("click", function() {
 			//Random color
 			rgb = RGB.random();
