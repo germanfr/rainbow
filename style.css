@@ -81,7 +81,12 @@ h1 img {
 	padding: 16px;
 	box-sizing: border-box;
 	border-bottom: 1px solid #E0E0E0;
+	text-align: left;
 }
+.tarjeta h2 {
+	padding-left: 4px;
+}
+
 #main > .tarjeta {
 	margin: 4px;
 	display: inline-block;
@@ -92,6 +97,7 @@ h1 img {
 	position:relative;
 	min-height: 100%;
 	width: 800px;
+	text-align: center;
 }
 
 #container {
@@ -175,8 +181,8 @@ h1 img {
 	border-radius: 0 0 50% 50%/0 0 100% 100%;
 }
 #attachedColor { 
-	transition: background-color .2s linear;
-	 border-radius: 50% 50% 0 0/100% 100% 0 0;
+	/*transition: background-color .2s linear;*/
+	border-radius: 50% 50% 0 0/100% 100% 0 0;
 }
 
 #attached-code {
@@ -251,7 +257,7 @@ div#attached-code, .title {
 #actions > div {
 	height: 32px;
 	padding: 0 8px 0 36px;
-	margin-bottom: 8px;
+	margin: 4px 0;
 
 	background-repeat: no-repeat;
 	background-position: left top;
@@ -266,21 +272,31 @@ div#attached-code, .title {
 }
 
 .rw-button-active, #actions > div:hover {
-	background-color: #d0d0d0;
+	background-color: #E0E0E0;
 	transition-duration: .1s;
 }
 #actions > div:active {
 	background-color: #C3C3C3;
 }
 
-#actions div:hover .title {
-	opacity:1;
-	visibility:visible;
+#action-fav {
+	background-image: url('assets/icons/action_fav.svg')
 }
-
-
-
-
+#action-info {
+	background-image: url('assets/icons/action_info.svg')
+}
+#action-code {
+	background-image: url('assets/icons/action_code.svg')
+}
+#action-invert {
+	background-image: url('assets/icons/action_invert.svg')
+}
+#action-random {
+	background-image: url('assets/icons/action_random.svg')
+}
+#action-websafe {
+	background-image: url('assets/icons/action_safe.svg')
+}
 
 
 .saved-color{
