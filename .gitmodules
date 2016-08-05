@@ -1,0 +1,6 @@
+[submodule "lib/collections.js"]
+	path = lib/collections.js
+	url = https://github.com/germanfr/collections.js.git
+[submodule "lib/colorjs"]
+	path = lib/colorjs
+	url = https://github.com/germanfr/colorjs.git
