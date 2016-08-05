@@ -1,3 +1,6 @@
 #Sublime text files
 *.sublime-project
 *.sublime-workspace
+
+#Folder to keep local files only. It will be ignored
+local/
