@@ -152,7 +152,8 @@
 
 			this.hexInput = containerElement.querySelector('.hex-input');
 
-			containerElement.addEventListener('change', this.rgbChange.bind(this), true);
+			containerElement.addEventListener('change', this.onChange.bind(this), true);
+			containerElement.addEventListener('click', this.onClick.bind(this));
 
 			store.listen(this);
 		}
@@ -177,7 +178,7 @@
 		onSave(color) {}
 		onUnSave(color) {}
 
-		rgbChange(e) {
+		onChange(e) {
 			let color;
 			const input = e.target;
 			if(input === this.redInput || input === this.greenInput || input === this.blueInput) {
@@ -193,8 +194,12 @@
 			} else {
 				color = new Color('hex', this.hexInput.value);
 			}
-
 			this.store.set(color);
+		}
+
+		onClick(e) {
+			if(e.target.type === 'text' && e.target === document.activeElement)
+				e.target.select();
 		}
 	}
 
