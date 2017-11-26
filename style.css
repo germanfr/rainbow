@@ -10,7 +10,7 @@
 
 body {
 	background: #E0E0E0;
-	font: 90% "Helvetica", "Arial";
+	font: 90% "Arial", "sans-serif";
 	color: #444;
 }
 
@@ -273,7 +273,7 @@ h1, .actions-panel {
 				}
 				.cp-outer-container .main-panel .controls .control-inputs input.hex-input {
 					font-size: 24px;
-					padding-left:34px;
+					padding-left: 32px;
 					line-height: 1.15em;
 					width: 148px;
 				}
@@ -282,7 +282,7 @@ h1, .actions-panel {
 					position: absolute;
 					line-height: 0px;
 					top: 50%;
-					left: 8px;
+					left: 10px;
 					z-index: 1;
 					pointer-events: none;
 					color: rgba(0,0,0,.5);
