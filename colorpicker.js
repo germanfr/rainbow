@@ -171,7 +171,7 @@
 
 		onSet(color) {
 			this.onPreview(color);
-			// this.hexInput.select();
+			this.hexInput.select();
 		}
 
 		onSave(color) {}
@@ -217,30 +217,35 @@
 		initBoard(board) {
 			this.boardHandle = this.createHandle(board);
 
-			const boundMoveListener = this.onBoardMouseMove.bind(this);
+			this.onBoardMouseMoveBound = this.onBoardMouseMove.bind(this);
+			this.onBoardMouseUpBound = this.onBoardMouseUp.bind(this);
 			board.addEventListener('mousedown', e => {
 				document.body.classList.add('non-selectable');
 				this.boardBounds = board.getBoundingClientRect();
 				this.onBoardMouseMove(e);
-				window.addEventListener('mousemove', boundMoveListener);
+				window.addEventListener('mousemove', this.onBoardMouseMoveBound);
+
+				window.addEventListener('mouseup', this.onBoardMouseUpBound);
 			});
 
-			window.addEventListener('mouseup', this.onBoardMouseUp.bind(this, boundMoveListener));
 			return board;
 		}
 
 		initBar(bar) {
 			this.barHandle = this.createHandle(bar);
 
-			const boundMoveListener = this.onBarMouseMove.bind(this);
+			this.onBarMouseMoveBound = this.onBarMouseMove.bind(this);
+			this.onBarMouseUpBound = this.onBarMouseUp.bind(this);
 			bar.addEventListener('mousedown', e => {
 				document.body.classList.add('non-selectable');
 				this.barBounds = bar.getBoundingClientRect();
 				this.onBarMouseMove(e);
-				window.addEventListener('mousemove', boundMoveListener);
+				window.addEventListener('mousemove', this.onBarMouseMoveBound);
+
+				window.addEventListener('mouseup', this.onBarMouseUpBound);
 			});
 
-			window.addEventListener('mouseup', this.onBarMouseUp.bind(this, boundMoveListener));
+
 			return bar;
 		}
 
@@ -255,7 +260,8 @@
 		}
 
 		onBoardMouseUp(moveCallback, e) {
-			window.removeEventListener('mousemove', moveCallback);
+			window.removeEventListener('mousemove', this.onBoardMouseMoveBound);
+			window.removeEventListener('mouseup', this.onBoardMouseUpBound);
 			document.body.classList.remove('non-selectable');
 			this.store.set(this.currentColor);
 		}
@@ -268,7 +274,10 @@
 		}
 
 		onBarMouseUp(moveCallback, e) {
-			this.onBoardMouseUp(moveCallback, e);
+			window.removeEventListener('mousemove', this.onBarMouseMoveBound);
+			window.removeEventListener('mouseup', this.onBarMouseUpBound);
+			document.body.classList.remove('non-selectable');
+			this.store.set(this.currentColor);
 		}
 
 		createHandle(parent) {
