@@ -4,23 +4,24 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>Rainbow Color Picker</title>
-	<link rel="shortcut icon" href="favicon.png"/>
 
-	<link rel="stylesheet" type="text/css" href="armondiga-style.css"/>
 	<link rel="stylesheet" type="text/css" href="style.css"/>
-
 	<script type="text/javascript" src="lib/colorjs/src/colorjs.js"></script>
-	<script type="text/javascript" src="lib/collections.js/collections.js"></script>
 	<script type="text/javascript" src="colorpicker.js"></script>
+
+	<link rel="shortcut icon" href="favicon.png"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="HTML color codes picker. You can obtain the hexadecimal, rgb and hsv codes as well as the color if you have one of that codes. There are lots of functionalities."/>
 	<meta name="keywords" content="HTML, color, CSS, RGB, hexadecimal, codes, picker" />
 </head>
 <body>
 
-	<h1><img src="assets/title/rainbow.png" heihgt="80px" width="542px" alt="Rainbow Color Picker"/>Rainbow Color Picker</h1>
-	<div id="main">
-		<div id="actions" class="tarjeta">
+	<h1 id="header">
+		<img src="assets/title/rainbow.png" heihgt="80px" width="542px" alt="Rainbow Color Picker"/>Rainbow Color Picker
+	</h1>
+
+	<div class="cp-outer-container">
+		<div class="actions-panel card">
 			<h2>Actions</h2>
 			<div id="action-fav">Save color</div>
 			<div id="action-info">Color info</div>
@@ -29,68 +30,34 @@
 			<div id="action-random">Random color</div>
 			<div id="action-websafe">Web-safe colors</div>
 		</div>
-		<div id="container" class="tarjeta">
-			<div id="pickboard">
-				<div id="pickboardPointer"></div>
-			</div>
-			<div id="huebar">
-				<div id="huebarPointer"></div>
-			</div>
 
-			<div id="salida">
-				<div id="muestra">
-					<div id="attachedColor">
-						<div id="attached-code" class="oculto">#FFFFFF</div>
-					</div>
-					<div id="currentColor"></div>
-				</div>
-
-				<div id="inputs">
+		<div class="main-panel card">
+			<div class="control-svboard">
+			</div><div class="controls">
+				<div class="output-sample"></div>
+				<div class="control-inputs">
 					<div>
-						<div><span>R</span><input type="text" id="redInput" value="255"/></div>
-						<div><span>G</span><input type="text" id="greenInput" value="255"/></div>
-						<div><span>B</span><input type="text" id="blueInput" value="255"/></div>
+						<div class="input-group"><span>R</span><input type="text" class="red-input" value="255"/></div>
+						<div class="input-group"><span>G</span><input type="text" class="green-input" value="255"/></div>
+						<div class="input-group"><span>B</span><input type="text" class="blue-input" value="255"/></div>
 					</div><div>
-						<div><span>H</span><input type="text" id="hueInput" value="0"/></div>
-						<div><span>S</span><input type="text" id="satInput" value="0"/></div>
-						<div><span>V</span><input type="text" id="valInput" value="100"/></div>
+						<div class="input-group"><span>H</span><input type="text" class="hue-input" value="0"/></div>
+						<div class="input-group"><span>S</span><input type="text" class="sat-input" value="0"/></div>
+						<div class="input-group"><span>V</span><input type="text" class="val-input" value="100"/></div>
 					</div>
 					<div id="hex-div">
-						<span>&#35;</span><input type="text" id="hexInput" value="FFFFFF" spellcheck="false"/>
+						<div class="input-group hex-group"><span>&#35;</span><input type="text" class="hex-input" value="FFFFFF" spellcheck="false"/></div>
 					</div>
-
 				</div>
+				<div class="control-huebar"></div>
 			</div>
 		</div>
 
-
-
-		<div id="saved-colors" class="tarjeta">
+		<div class="favorites-panel card">
 			<h2>Saved colors</h2>
-			<div class="saved-color" style="background-color:rgb(45,125,190);">
-				<input type="text" spellcheck="false" readonly="readonly" value="454545"/>
-			</div>
-			<div class="saved-color" style="background-color:rgb(136,208,63);">
-				<input type="text" spellcheck="false" readonly="readonly" value="88D03F"/>
-			</div>
-			<div class="saved-color" style="background-color:rgb(45,125,190);">
-				<input type="text" spellcheck="false" readonly="readonly" value="454545"/>
-			</div>
-			<div class="saved-color" style="background-color:rgb(136,208,63);">
-				<input type="text" spellcheck="false" readonly="readonly" value="88D03F"/>
-			</div>
-			<div class="saved-color" style="background-color:rgb(45,125,190);">
-				<input type="text" spellcheck="false" readonly="readonly" value="454545"/>
-			</div>
-			<div class="saved-color" style="background-color:rgb(136,208,63);">
-				<input type="text" spellcheck="false" readonly="readonly" value="DDDDDD"/>
-			</div>
+			<div class="favorite-colors-box"></div>
 		</div>
-
-
-
 	</div>
-
 	<div id="footer">
 		Made by <a href="https://github.com/germanfr">Germán Franco</a> with love and a keyboard.
 	</div>
