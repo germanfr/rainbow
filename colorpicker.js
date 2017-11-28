@@ -84,11 +84,17 @@
 		}
 
 		static _storageSave(key, value) {
-			localStorage.setItem(key, value);
+			try {
+				localStorage.setItem(key, value);
+			} catch(e) {}
 		}
 
 		static _storageLoad(key) {
-			return localStorage.getItem(key) || '';
+			let value;
+			try {
+				value = localStorage.getItem(key);
+			} catch(e) {}
+			return value || '';
 		}
 
 		listen(listener) {
