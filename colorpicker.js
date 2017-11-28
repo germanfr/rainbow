@@ -9,7 +9,7 @@
 	}
 
 	const MAX_SAVED_COLORS = 16;
-	const COLOR_BYTE_LENGTH = 3;
+	const COLOR_NBYTES = 3;
 	const LOCAL_STORAGE_KEY_HISTORY = 'saved-colors';
 	const LOCAL_STORAGE_KEY_CURRENT = 'current-color';
 
@@ -22,7 +22,7 @@
 
 			this.loadFromPersistent();
 			let lastColorStr = ColorStore._storageLoad(LOCAL_STORAGE_KEY_CURRENT);
-			this.current = lastColorStr.length ? new Color('hex', lastColorStr) : Color.random();
+			this.current = lastColorStr ? new Color('hex', lastColorStr) : Color.random();
 		}
 
 		preview(color) {
@@ -75,8 +75,8 @@
 		}
 
 		loadFromPersistent() {
-			const nChars = COLOR_BYTE_LENGTH * 2;
-			let str = ColorStore._storageLoad(LOCAL_STORAGE_KEY_HISTORY	);
+			const nChars = COLOR_NBYTES * 2;
+			const str = ColorStore._storageLoad(LOCAL_STORAGE_KEY_HISTORY);
 			for(let i = 0; i <= str.length - nChars; i += nChars) {
 				let colorStr = str.substr(i, nChars);
 				this._pushToFavorites(new Color('hex', colorStr));
