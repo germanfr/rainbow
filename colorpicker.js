@@ -468,6 +468,8 @@
 
 	class GUIActions {
 		constructor(store) {
+			const dialogManager = new DialogManager();
+			var webSafeD;
 			document.getElementById("action-fav").addEventListener('click', () => {
 				store.saveCurrent();
 			});
@@ -486,12 +488,160 @@
 				store.set(Color.random());
 			});
 			document.getElementById("action-websafe").addEventListener('click', () => {
-				this.notImplemented();
+				if(!webSafeD) {
+					webSafeD = new WebSafeDialog(dialogManager, store);
+				}
+				webSafeD.open();
 			});
 		}
 
 		notImplemented() {
 			alert('Not implemented yet!');
+		}
+	}
+
+	class SingleOpenManager {
+		constructor() {
+			this.current = null;
+		}
+
+		open(element) {
+			if(this.current && this.current !== element)
+				this.current.hide();
+			this.current = element;
+		}
+
+		close(element) {
+			if(element === this.current) {
+				this.current = null;
+				return true;
+			}
+			return false;
+		}
+	}
+
+	class DialogManager extends SingleOpenManager {
+		constructor() {
+			super();
+
+			this._overlay = document.createElement('div');
+			this._overlay.className = 'dialog-overlay';
+			this._showOverlay(false);
+
+			this._overlay.addEventListener('click', e => {
+				if(e.target === this._overlay)
+					this.open(null);
+			});
+			document.body.appendChild(this._overlay);
+		}
+
+		open(dialog) {
+			super.open(dialog);
+			this._showOverlay(dialog != null);
+		}
+
+		close(dialog) {
+			const legit = super.close(dialog);
+			if(legit)
+				this._showOverlay(false);
+			return legit;
+		}
+
+		_showOverlay(value) {
+			this._overlay.classList.toggle('hidden', value === false);
+			document.body.classList.toggle('non-scrollable', value !== false);
+		}
+
+		addDialog(dialog) {
+			this._overlay.appendChild(dialog.element);
+		}
+	}
+
+	class Dialog {
+		constructor(manager, title) {
+			this._manager = manager;
+			this._open = false;
+
+			this.element = document.createElement('div');
+			this.element.className = 'dialog-window card';
+			this.element.addEventListener('transitionend', this._transitionEnd.bind(this));
+
+			if(title) {
+				let titleElement = document.createElement('h2');
+				titleElement.textContent = title;
+				this.element.appendChild(titleElement);
+			}
+
+			let closeButton = document.createElement('button');
+			closeButton.className = 'close-button';
+			closeButton.addEventListener('click', e => { this.close() });
+			this.element.appendChild(closeButton);
+
+			this.content = document.createElement('div');
+			this.content.className = 'dialog-window-content';
+			this.element.appendChild(this.content);
+
+			this._setVisible(false);
+			manager.addDialog(this);
+		}
+
+		open() {
+			this._open = true;
+			this._manager.open(this);
+			this._setVisible(true);
+		}
+
+		close() {
+			this._manager.close(this);
+			this.hide();
+		}
+
+		hide() {
+			this._open = false;
+			this._setVisible(false);
+		}
+
+		_setVisible(value) {
+			if(value)
+				this._showDOM(true);
+			requestAnimationFrame(() => { // Do this asynchronously so that .nodisplay gets removed first
+				this.element.classList.toggle('hidden', value === false);
+			});
+		}
+
+		_showDOM(value) {
+			this.element.classList.toggle('nodisplay', value === false);
+		}
+
+		_transitionEnd(e) {
+			if(!this._open) {
+				this._showDOM(false);
+			}
+		}
+	}
+
+	class WebSafeDialog extends Dialog {
+		constructor(manager, store) {
+			super(manager, 'Web-safe colors');
+			this.store = store;
+
+			let color, cel;
+			let callback = this.onClick.bind(this);
+			let table = document.createElement('div');
+			table.className = 'web-safe-table';
+			for(let r = 0; r <=0xFF0000; r += 0x330000)
+				for(let g = 0; g <=0x00FF00; g += 0x003300)
+					for(let b = 0; b <= 0x0000FF; b += 0x000033) {
+						color = new Color('hex', r | g | b);
+						cel = new ColorElement(color, callback);
+						table.appendChild(cel.element);
+					}
+			this.content.appendChild(table);
+		}
+
+		onClick(element) {
+			this.close();
+			this.store.set(element.color);
 		}
 	}
 
