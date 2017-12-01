@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; }
 
 :root {
-	--large-padding: 32px;
+	--large-padding: 24px;
 	--std-padding: 16px;
 	--small-padding: 8px;
 
@@ -135,18 +135,14 @@ h1, .actions-panel {
 		}
 
 		.cp-outer-container .actions-panel > div {
-			--item-height: 32px;
-			height: var(--item-height);
-			padding: 0 var(--std-padding);
-			padding-left: calc(var(--std-padding) + var(--item-height) + 4px);
+			padding: var(--small-padding) var(--std-padding);
+			padding-left: calc(var(--large-padding) + 24px + var(--small-padding));
 			margin: 4px 0;
 
 			background-repeat: no-repeat;
-			background-position: var(--std-padding) top;
-			background-size: auto 100%;
+			background-position: var(--large-padding) center;
 
 			color: #333;
-			line-height: var(--item-height);
 			white-space: nowrap;
 
 			cursor: pointer;
