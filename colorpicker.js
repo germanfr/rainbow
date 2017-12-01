@@ -476,9 +476,6 @@
 			document.getElementById("action-info").addEventListener('click', () => {
 				this.notImplemented();
 			});
-			document.getElementById("action-code").addEventListener('click', () => {
-				this.notImplemented();
-			});
 			document.getElementById("action-invert").addEventListener('click', () => {
 				let copy = store.current.clone();
 				copy.invert();

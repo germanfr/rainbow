@@ -166,9 +166,6 @@ h1, .actions-panel {
 		.actions-panel #action-info {
 			background-image: url('assets/icons/action_info.svg')
 		}
-		.actions-panel #action-code {
-			background-image: url('assets/icons/action_code.svg')
-		}
 		.actions-panel #action-invert {
 			background-image: url('assets/icons/action_invert.svg')
 		}
