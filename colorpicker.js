@@ -40,13 +40,10 @@
 		}
 
 		unsave(color) {
-			for(let i = 0; i < this.favorites.length; i++) {
-				let cur = this.favorites[i];
-				if(cur.equals(color)) {
-					this.favorites.splice(i, 1);
-					this._notifyUnSave(cur);
-					return;
-				}
+			const idx = this.favorites.findIndex(c => c.equals(color));
+			if(idx !== -1) {
+				const [old] = this.favorites.splice(idx, 1);
+				this._notifyUnSave(old);
 			}
 		}
 
@@ -478,17 +475,15 @@
 			this.element.appendChild(colorElem.element);
 			if(this.element.scrollWidth > this.element.clientWidth) {
 				this.store.unsave(this.elementList[0].color);
+
 			}
 		}
 
 		onUnSave(color) {
-			for(let i = 0, el; i < this.elementList.length; i++) {
-				el = this.elementList[i];
-				if(el.color.equals(color)) {
-					el.remove(this.transitions);
-					this.elementList.splice(i, 1);
-					return;
-				}
+			const idx = this.elementList.findIndex(el => color.equals(el.color));
+			if(idx !== -1) {
+				this.elementList[idx].remove(this.transitions);
+				this.elementList.splice(idx, 1);
 			}
 		}
 
