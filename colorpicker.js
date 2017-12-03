@@ -1,13 +1,5 @@
 (function() {
 
-	/**************
-	*    OTHER    *
-	**************/
-
-	function setBackgroundRGB(element ,rgb) {
-		element.style.backgroundColor = rgb.toString();
-	}
-
 	const MAX_SAVED_COLORS = 16;
 
 	class ColorStore {
@@ -717,9 +709,12 @@
 		}
 	}
 
-	/***************
-	*    EVENTS    *
-	***************/
+	/********************
+	*    START POINT    *
+	*********************/
+
+	const store = new ColorStore(Color.random());
+	const storage = new PersistentStorage(store);
 
 	window.addEventListener("DOMContentLoaded",function() {
 		const container = document.querySelector('.cp-outer-container');
@@ -730,8 +725,7 @@
 			inputs: container.querySelector('.control-inputs'),
 			favorites: container.querySelector('.favorite-colors-box')
 		}
-		const store = new ColorStore(Color.random());
-		const storage = new PersistentStorage(store);
+
 		const inputs = new GUITextInputs(store, UI.inputs);
 		const bboard = new GUIPicker(store, UI.pickboard, UI.huebar);
 		const eoutput = new GUIOutput(store, UI.outsample);
