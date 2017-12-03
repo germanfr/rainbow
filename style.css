@@ -313,13 +313,14 @@ h1, .actions-panel {
 							opacity: 1;
 						}
 				.cp-outer-container .main-panel button .tooltip {
+					--tooltip-bg: rgba(51,51,51,.75);
 					position: absolute;
-					bottom: 100%;
+					bottom: 90%;
 					left: 50%;
-					transform: translate(-50%, 0);
+					transform: translateX(-50%);
 					z-index: 100;
 					white-space: nowrap;
-					background: rgba(0,0,0,.75);
+					background: var(--tooltip-bg);
 					color: #FAFAFA;
 					border-radius: 3px;
 					padding: 6px 10px;
@@ -331,12 +332,12 @@ h1, .actions-panel {
 					.cp-outer-container .main-panel button .tooltip:after {
 						content: '';
 						border: 6px solid transparent;
-						border-top-color: rgba(0,0,0,.75);
+						border-top-color: var(--tooltip-bg);
 						position: absolute;
 						z-index: 1;
-						bottom: 0;
+						top: 100%;
 						left: 50%;
-						transform: translate(-50%, 100%);
+						transform: translateX(-50%);
 					}
 					.cp-outer-container .main-panel button .tooltip.hidden {
 						opacity: 0;
