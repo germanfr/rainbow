@@ -157,6 +157,7 @@
 			this.valInput = containerElement.querySelector('.val-input');
 
 			this.hexInput = containerElement.querySelector('.hex-input');
+			this.hexInput.insertAdjacentElement('afterend', new CopyButton(this.hexInput).element);
 
 			containerElement.addEventListener('change', this.onChange.bind(this), true);
 			containerElement.addEventListener('click', this.onClick.bind(this));
@@ -206,6 +207,35 @@
 		onClick(e) {
 			if(e.target.type === 'text' && e.target === document.activeElement)
 				e.target.select();
+		}
+	}
+
+	class CopyButton {
+		constructor(src) {
+			this.src = src;
+
+			this.element = document.createElement('button');
+			this.element.className = 'copy-button';
+			this.element.addEventListener('click', this.onClick.bind(this));
+
+			this.tooltip = document.createElement('div');
+			this.tooltip.className = 'tooltip hidden';
+			this.tooltip.textContent = 'Copied';
+			this.element.appendChild(this.tooltip);
+		}
+
+		onClick() {
+			try {
+				this.src.select();
+				if(document.execCommand('copy'))
+					this._showTooltip();
+			} catch(e) {}
+		}
+
+		_showTooltip() {
+			this.tooltip.classList.remove('hidden');
+			if(this.timeout) clearTimeout(this.timeout);
+			this.timeout = setTimeout(() => { this.tooltip.classList.add('hidden') }, 4000);
 		}
 	}
 
