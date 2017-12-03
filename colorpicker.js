@@ -562,6 +562,11 @@
 				if(e.target === this._overlay)
 					this.open(null);
 			});
+			window.addEventListener('keydown', (e) => {
+				if(e.key === 'Escape')
+					this.open(null);
+			});
+
 			document.body.appendChild(this._overlay);
 		}
 
