@@ -9,9 +9,6 @@
 	}
 
 	const MAX_SAVED_COLORS = 16;
-	const COLOR_NBYTES = 3;
-	const LOCAL_STORAGE_KEY_HISTORY = 'saved-colors';
-	const LOCAL_STORAGE_KEY_CURRENT = 'current-color';
 
 	class ColorStore {
 		constructor() {
@@ -20,9 +17,7 @@
 
 			this._listeners = [];
 
-			this.loadFromPersistent();
-			let lastColorStr = ColorStore._storageLoad(LOCAL_STORAGE_KEY_CURRENT);
-			this.current = lastColorStr ? new Color('hex', lastColorStr) : Color.random();
+			this.current = Color.random();
 		}
 
 		preview(color) {
@@ -33,12 +28,10 @@
 		set(color) {
 			this.current = color;
 			this._notifySet();
-			ColorStore._storageSave(LOCAL_STORAGE_KEY_CURRENT, this.current);
 		}
 
 		save(color) {
 			this._pushToFavorites(color.clone());
-			this.saveToPersistent();
 			this._notifySave();
 		}
 
@@ -64,37 +57,6 @@
 				this.favorites.shift();
 				this._notifyUnSave(removed);
 			}
-		}
-
-		saveToPersistent() {
-			let str = '';
-			for(let color of this.favorites) {
-				str += color.toStringHEX(false);
-			}
-			ColorStore._storageSave(LOCAL_STORAGE_KEY_HISTORY, str);
-		}
-
-		loadFromPersistent() {
-			const nChars = COLOR_NBYTES * 2;
-			const str = ColorStore._storageLoad(LOCAL_STORAGE_KEY_HISTORY);
-			for(let i = 0; i <= str.length - nChars; i += nChars) {
-				let colorStr = str.substr(i, nChars);
-				this._pushToFavorites(new Color('hex', colorStr));
-			}
-		}
-
-		static _storageSave(key, value) {
-			try {
-				localStorage.setItem(key, value);
-			} catch(e) {}
-		}
-
-		static _storageLoad(key) {
-			let value;
-			try {
-				value = localStorage.getItem(key);
-			} catch(e) {}
-			return value || '';
 		}
 
 		listen(listener) {
@@ -141,6 +103,86 @@
 					this._listeners[i].onUnSave(color);
 				} catch(everything) {}
 			}
+		}
+	}
+
+	/* Snippet of class that listens to Store events
+	class Listener {
+		constructor(store) {
+			// Do all stuff
+			store.listen(this);
+		}
+		onPreview(color) { }
+
+		onSet(color) { }
+
+		onSave(color) { }
+
+		onUnsave(color) { }
+	}
+	*/
+
+	const COLOR_NBYTES = 3;
+	const LOCAL_STORAGE_KEY_HISTORY = 'saved-colors';
+	const LOCAL_STORAGE_KEY_CURRENT = 'current-color';
+
+	class PersistentStorage {
+		constructor(store) {
+			this.store = store;
+
+			const lastColor = this.storageLoad(LOCAL_STORAGE_KEY_CURRENT);
+			if(lastColor)
+				store.set(new Color('hex', lastColor));
+			this._loadFavorites();
+
+			store.listen(this);
+			this.started = true;
+		}
+
+		onPreview(color) {}
+
+		onSet(color) {
+			this.storageSave(LOCAL_STORAGE_KEY_CURRENT, color.toStringHEX(false));
+		}
+
+		onSave(color) {
+			if(this.started)
+				this._saveFavorites();
+		}
+
+		onUnSave(color) {
+			this._saveFavorites();
+		}
+
+		_saveFavorites() {
+			let str = '';
+			for(let color of this.store.favorites) {
+				str += color.toStringHEX(false);
+			}
+			this.storageSave(LOCAL_STORAGE_KEY_HISTORY, str);
+		}
+
+		_loadFavorites() {
+			const nChars = COLOR_NBYTES * 2;
+			const str = this.storageLoad(LOCAL_STORAGE_KEY_HISTORY);
+			for(let i = 0; i <= str.length - nChars; i += nChars) {
+				let colorStr = str.substr(i, nChars);
+				this.store.save(new Color('hex', colorStr));
+			}
+		}
+
+		storageSave(key, value) {
+			try {
+				localStorage.setItem(key, value);
+			} catch(e) {}
+		}
+
+		storageLoad(key) {
+			let value;
+			try {
+				value = localStorage.getItem(key);
+			} catch(e) {}
+			return value || '';
 		}
 	}
 
@@ -694,12 +736,12 @@
 			favorites: container.querySelector('.favorite-colors-box')
 		}
 		const store = new ColorStore(Color.random());
+		const storage = new PersistentStorage(store);
 		const inputs = new GUITextInputs(store, UI.inputs);
 		const bboard = new GUIPicker(store, UI.pickboard, UI.huebar);
 		const eoutput = new GUIOutput(store, UI.outsample);
 		const favlist = new GUIFavoritesList(store, UI.favorites);
 		const actionbtns = new GUIActions(store);
-
 	});
 
 })();
