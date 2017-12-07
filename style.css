@@ -201,7 +201,7 @@ h1, .actions-panel {
 		}
 
 		.cp-outer-container .main-panel .control-svboard {
-			background-image: url(assets/picker/colormask.png);
+			background-image: url(assets/picker/colormask.svg);
 			background-color: #F00;
 			height: 320px;
 			width: 320px;
