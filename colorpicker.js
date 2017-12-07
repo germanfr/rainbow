@@ -389,13 +389,15 @@
 			let x = color.sat * this.board.clientWidth;
 			let y = (1 - color.val) * this.board.clientHeight;
 			let z = color.hue * this.bar.clientWidth / 360;
-			if(y < 3) y = 3;
-			if(x < 3) x = 3;
-			if(z < 3) z = 3;
 
-			this.boardHandle.style.top = y - 8 + 'px';
-			this.boardHandle.style.left = x - 8 + 'px';
-			this.barHandle.style.left = z - 3 + 'px';
+			if(x < 2) x = 2;
+			else if(x > this.board.clientWidth - 2) x = this.board.clientWidth - 2;
+			if(y < 2) y = 2;
+			else if(y > this.board.clientHeight - 2) y = this.board.clientHeight - 2;
+
+			this.boardHandle.style.top = y + 'px';
+			this.boardHandle.style.left = x + 'px';
+			this.barHandle.style.left = z + 'px';
 		}
 
 		onPreview(color) {

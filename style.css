@@ -211,6 +211,7 @@ h1, .actions-panel {
 				position: absolute;
 				height: 14px;
 				width: 14px;
+				margin: -7px 0 0 -7px;
 				background-image: url(assets/picker/cursor.svg);
 			}
 
