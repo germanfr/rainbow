@@ -65,7 +65,9 @@
 			for(let i = 0; i < this._listeners.length; i++) {
 				try {
 					this._listeners[i].onPreview(this.provisional);
-				} catch(everything) {}
+				} catch(e) {
+					console.error(e);
+				}
 			}
 		}
 
@@ -73,7 +75,9 @@
 			for(let i = 0; i < this._listeners.length; i++) {
 				try {
 					this._listeners[i].onSet(this.current);
-				} catch(everything) {}
+				} catch(e) {
+					console.error(e);
+				}
 			}
 		}
 
