@@ -201,7 +201,7 @@ h1, .actions-panel {
 		}
 
 		.cp-outer-container .main-panel .control-svboard {
-			background-image: url(assets/picker/colormask.svg);
+			background-image: linear-gradient(to top, #000000, transparent), linear-gradient(to right, #ffffff, transparent);
 			background-color: #F00;
 			height: 320px;
 			width: 320px;
