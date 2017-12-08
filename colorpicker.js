@@ -405,10 +405,13 @@
 		}
 
 		onPreview(color) {
-			this.truncBg.hue = color.hue;
+			const hue = color.hue;
+			if(hue !== this.truncBg.hue) {
+				this.truncBg.hue = hue;
+				this.board.style.backgroundColor = this.truncBg.toStringRGB();
+			}
 			this.currentColor = color;
 			this.updateHandles(color);
-			this.board.style.backgroundColor = this.truncBg.toStringRGB();
 		}
 
 		onSet(color) {
