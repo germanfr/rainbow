@@ -125,6 +125,10 @@ h1, .actions-panel {
 	box-sizing: border-box;
 	text-align: left;
 }
+	.card h2 {
+		font-size: 130%;
+		font-weight: bold;
+	}
 
 .cp-outer-container {
 	margin: 0 auto;
@@ -416,6 +420,8 @@ h1, .actions-panel {
 			padding: 4px 0;
 			text-align: center;
 			z-index: 1;
+			font-size: 14px;
+			font-family: monospace;
 		}
 		.color-element:after {
 			content: '';
