@@ -9,10 +9,20 @@
 	--select-fg: rgba(0,0,0,.65);
 }
 
+@font-face {
+	font-family: 'Roboto';
+	font-weight: normal;
+	src: local('Roboto'),
+	     local('Roboto-Regular'),
+	     url('assets/fonts/roboto-regular.woff') format('woff');
+}
+
 body {
 	background: #E0E0E0;
-	font: 90% "Arial", "sans-serif";
+	font: 90% 'Roboto', 'Open Sans', sans-serif;
 	color: #444;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -282,6 +292,7 @@ h1, .actions-panel {
 					z-index: 1;
 					pointer-events: none;
 					color: rgba(0,0,0,.5);
+					font-family: sans-serif;
 				}
 				.cp-outer-container .main-panel .controls .control-inputs .hex-group {
 					margin-top: var(--small-padding);
