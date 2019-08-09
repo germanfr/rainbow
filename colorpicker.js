@@ -205,9 +205,9 @@
 			this.greenInput.value = color.green;
 			this.blueInput.value = color.blue;
 
-			this.hueInput.value = Math.floor(color.hue);
-			this.satInput.value = Math.floor(color.sat * 100);
-			this.valInput.value = Math.floor(color.val * 100);
+			this.hueInput.value = Math.round(color.hue);
+			this.satInput.value = Math.round(color.sat * 100);
+			this.valInput.value = Math.round(color.val * 100);
 
 			this.hexInput.value = color.toStringHEX(false).toUpperCase();
 		}
