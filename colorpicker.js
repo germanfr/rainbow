@@ -196,6 +196,7 @@
 
 			containerElement.addEventListener('change', this.onChange.bind(this), true);
 			containerElement.addEventListener('click', this.onClick.bind(this));
+			containerElement.addEventListener('wheel', this.onInputScroll.bind(this), true);
 
 			store.listen(this);
 		}
@@ -242,6 +243,21 @@
 		onClick(e) {
 			if(e.target.type === 'text' && e.target === document.activeElement)
 				e.target.select();
+		}
+
+		onInputScroll(event) {
+			let target = event.target;
+			if (target.tagName != 'INPUT')
+				return;
+
+			if (target === this.hexInput)
+				return;
+
+			let ammount = event.deltaY > 0 ? 1 : -1;
+			let val = parseInt(target.value);
+			target.value = val - ammount;
+
+			this.onChange(event);
 		}
 	}
 
